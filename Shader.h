@@ -14,6 +14,11 @@
 #include <sstream>
 #include <iostream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+
 class Shader
 {
 public:
@@ -22,6 +27,8 @@ public:
 	Shader(const char* vertexPath, const char * fragmentPath);
 
 	void use();
+
+	void setmat4(const char * uniformName, glm::mat4 matrix);
 
 
 };

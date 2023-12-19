@@ -34,7 +34,7 @@
     <None Include="FragmentShader.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="VertexShader.glsl">
+    <None Include="VertexShader.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
