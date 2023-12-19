@@ -1,6 +1,11 @@
 #include <glad/glad.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "Shader.h"
 
 #define Width 1000
@@ -72,10 +77,23 @@ int main(void)
     glEnableVertexAttribArray(1);
     shader.use();//makes it the current rendering state
 
+
+    glm::mat4 trans = glm::mat4(1.0f);
+    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+
+
+    double temp = 0.0;
+
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(sin(temp), cos(temp), tan(temp)));
+
+        unsigned int transformLoc = glGetUniformLocation(shader.id, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
         // render the triangle
         shader.use();
@@ -85,7 +103,7 @@ int main(void)
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-
+        temp += 0.001;
     }
     return 0;
 }
