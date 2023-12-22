@@ -7,9 +7,10 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
-
+#include "camera.h"
 #define Width 1200
 #define Height 1200
+#define sense 0.1
 
 float vertices[] = {
 
@@ -62,6 +63,18 @@ glm::vec3 cubePositions[] = {   glm::vec3(0.0f, 0.0f, 0.0f),
                                 glm::vec3(-1.3f, 1.0f, -1.5f)
 };
 
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void processInput(GLFWwindow* window);
+
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = Width / 2.0f;
+float lastY = Height / 2.0f;
+bool firstMouse = true;
+
+float deltaTime = 0.0f; // Time between current frame and last frame 
+
 int main(void)
 {
     glfwInit();
@@ -78,7 +91,15 @@ int main(void)
         return -1;
     }
 
+    Camera cam = Camera();
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
     glfwMakeContextCurrent(window); // who wouldve guesd makes the main window the current thread
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { // give glad the address of all the open gl function pointeres, glfwGet gets teh address for this os
 
         std::cout << "failed to init glad";
@@ -114,35 +135,39 @@ int main(void)
 
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
     shader.use();//makes it the current rendering state
 
-    // define all the matrix
-    //glm::mat4 model = glm::mat4(1.0f); // convert to world
-    //model = glm::rotate(model, glm::radians(-55.0f),
-    //glm::vec3(1.0f, 0.0f, 0.0f));
 
-    glm::mat4 view = glm::mat4(1.0f); // convert to view
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -40.0f));
-    glm::mat4 projection; // convert to clip space
-    projection = glm::perspective(glm::radians(45.0f), (float)Width / (float)Height, 0.1f, 100.0f);
 
 
     glEnable(GL_DEPTH_TEST);
 
     float temp = 0;
 
+    float lastFrame = 0.0f; // Time of last frame
+    float thisFrame = 0.0f;
+
     while (!glfwWindowShouldClose(window))
     {
+        thisFrame = glfwGetTime();
+        deltaTime = thisFrame - lastFrame;
+        lastFrame = thisFrame;
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shader.use();
-
-
-
+        
+        // camera/view transformation
+        glm::mat4 view = camera.GetViewMatrix();
         shader.setmat4("view", view);
+
+        // pass projection matrix to shader (note that in this case it could change every frame)
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)Width / (float)Height, 0.1f, 100.0f);
         shader.setmat4("projection", projection);
 
+
+        processInput(window);
 
         // render the triangle
 
@@ -151,6 +176,8 @@ int main(void)
         int count = 0;
         for (glm::vec3 pos : cubePositions) {
             
+
+
             glm::mat4 model = glm::mat4(1.0f);
 
             model = glm::translate(model, pos);
@@ -163,13 +190,53 @@ int main(void)
         }
 
 
-
-
         glfwSwapBuffers(window);
         glfwPollEvents();
         temp += 0.01;
+        std::cout << 1 / deltaTime << '\n';
     }
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     return 0;
+}
+
+void processInput(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }
