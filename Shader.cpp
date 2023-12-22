@@ -9,7 +9,7 @@ Shader::Shader(const char* vertexPath, const char * fragmentPath)
 	std::ifstream fragFile(fragmentPath, std::ios::in);
 
 	if (!(vertFile.is_open() && fragFile.is_open())) {
-		std::cout << "couldnt open files";
+		std::cout << "couldnt open files" << vertexPath << fragmentPath;
 		return ;
 	}
 	try
@@ -41,7 +41,7 @@ Shader::Shader(const char* vertexPath, const char * fragmentPath)
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << vertexPath << fragmentPath << std::endl;
 		return ;
 	}
 	unsigned int vertextShader;
@@ -51,7 +51,7 @@ Shader::Shader(const char* vertexPath, const char * fragmentPath)
 	glGetShaderiv(vertextShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(vertextShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << vertexPath << fragmentPath << std::endl;
 		return;
 	}
 
@@ -82,5 +82,10 @@ void Shader::setmat4(const char* uniformName, glm::mat4 matrix)
 {
 	glUniformMatrix4fv(glGetUniformLocation(id, uniformName)
 		, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Shader::setVec3(const char* uniformName, glm::vec3 vec)
+{
+	glUniform3fv(glGetUniformLocation(id, uniformName),1,  glm::value_ptr(vec));
 }
 

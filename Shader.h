@@ -30,6 +30,6 @@ public:
 
 	void setmat4(const char * uniformName, glm::mat4 matrix);
 
-
+	void setVec3(const char* uniformName, glm::vec3 vec);
 };
 
