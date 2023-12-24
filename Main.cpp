@@ -127,7 +127,7 @@ int main(void)
     float lastFrame = 0.0f; // Time of last frame
     float thisFrame = 0.0f;
  
-
+    glm::vec3 lightColour(1.0f, 1.0f, 1.0f);
     while (!glfwWindowShouldClose(window))
     {
         thisFrame = glfwGetTime();
@@ -162,15 +162,22 @@ int main(void)
         light.setmat4("model", model);
         light.setmat4("view", view);
         light.setmat4("projection", projection);
+        light.setVec3("lightColour", lightColour);
 
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
         shader.use();
         glBindVertexArray(VAO);
         shader.setVec3("objectColour", glm::vec3(1.0f, 0.5f, 0.31f));
-        shader.setVec3("lightColour", glm::vec3(1.0f, 1.0f, 1.0f));
         shader.setVec3("lightPos", lightPos);
 
+        shader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+        shader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+        shader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+        shader.setFloat("material.shininess", 32.0f);
+        shader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f) * lightColour);
+        shader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)* glm::vec3(0.2f, 0.2f, 0.2f)* lightColour); // darkened
+        shader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
         int count = 0;
         for (glm::vec3 pos : cubePositions) {
             
@@ -189,9 +196,12 @@ int main(void)
         glfwSwapBuffers(window);
         glfwPollEvents();
         temp += 0.001;
-       // std::cout << 1 / deltaTime << '\n';
+        //std::cout << 1 / deltaTime << '\n';
         lightPos.x = 5 * cos(temp);
         lightPos.z = 5 * sin(temp);    
+        lightColour.x = sin(glfwGetTime());
+        lightColour.y = sin(glfwGetTime() * 0.7);
+        lightColour.z = sin(glfwGetTime() *0.2);
     }
 
     return 0;
