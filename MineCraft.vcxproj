@@ -152,6 +152,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="stb_image..cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,12 +160,17 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShader.glsl" />
     <None Include="light.frag" />
     <None Include="vertexShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="container2.png" />
+    <Image Include="container2_specular.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

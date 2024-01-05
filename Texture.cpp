@@ -1,10 +1,29 @@
 #include "Texture.h"
 
-Texture::Texture(char* path)
+matts::Texture::Texture(const char* path)
 {
-	data = stbi_load("container.jpg", &width, &height, &nrChanels, 0);
+	textureData = 0;
+	data = stbi_load(path, &width, &height, &nrChanels, 0);
 
 	if (data) {
+
+		GLenum format;
+		switch (nrChanels)
+		{
+		case 1:
+			format = GL_RED;
+			break;
+		case 3:
+			format = GL_RGB;
+			break;
+		case 4:
+			format = GL_RGBA;
+			break;
+		default:
+			break;
+		}
+
+
 		glGenTextures(1, &textureData);
 		glBindTexture(GL_TEXTURE_2D, textureData);
 
@@ -13,7 +32,7 @@ Texture::Texture(char* path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
@@ -24,7 +43,7 @@ Texture::Texture(char* path)
 
 }
 
-void Texture::use()
+void matts::Texture::use()
 {
 	glBindTexture(GL_TEXTURE_2D, textureData);
 }

@@ -4,11 +4,11 @@ in vec3 Normal;
 in vec3 FragPos;
 
 in vec3 lightPosOut;
+in vec2 TexCoords;
 
 struct Material { 
-    vec3 ambient;
-    vec3 diffuse; 
-    vec3 specular; 
+    sampler2D diffuse;
+    sampler2D specular; 
     float shininess;
 };
 uniform Material material;
@@ -27,21 +27,20 @@ uniform vec3 objectColour;
 void main()
 {
     //ambiewnt
-    vec3 ambient = material.ambient * light.ambient;
-
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
 
     //diffuse
     vec3 norm = normalize(Normal); 
     vec3 lightDir = normalize(lightPosOut - FragPos);
    
     float scaler = max( dot(norm,lightDir),0.0); // gives a ratio of how clost to perpendicular and adjusts the light based on that
-    vec3 diffuse = (scaler * material.diffuse) *light.diffuse ;
+    vec3 diffuse = light.diffuse * scaler * vec3(texture(material.diffuse,TexCoords));
 
 
 
     float spec = pow( max( dot( normalize(-FragPos), reflect(-lightDir, norm) ), 0.0), material.shininess); // pow makes it more concentrated you know maths
-    vec3 specular = material.specular * spec * light.specular;
+    vec3 specular =  spec * light.specular* vec3(texture(material.specular,TexCoords));
 
-    FragColor = vec4((ambient + diffuse + specular) * objectColour, 1.0f);
+    FragColor = vec4((ambient + diffuse + specular), 1.0f);
 
 }

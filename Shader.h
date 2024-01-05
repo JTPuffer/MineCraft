@@ -32,5 +32,6 @@ public:
 
 	void setVec3(const char* uniformName, glm::vec3 vec);
 	void setFloat(const char* uniformName, float f);
+	void setint(const char* uniformName, int i);
 };
 

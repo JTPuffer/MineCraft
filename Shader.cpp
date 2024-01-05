@@ -94,3 +94,9 @@ void Shader::setFloat(const char* uniformName, float f)
 	glUniform1fv(glGetUniformLocation(id, uniformName), 1, &f);
 }
 
+void Shader::setint(const char* uniformName, int i)
+{
+	glUniform1iv(glGetUniformLocation(id, uniformName),1, &i);
+
+}
+

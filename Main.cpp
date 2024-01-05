@@ -9,6 +9,7 @@
 #include "Shader.h"
 #include "camera.h"
 #include "Block.h"
+#include "Texture.h"
 #define Width 1200
 #define Height 1200
 #define sense 0.1
@@ -114,12 +115,14 @@ int main(void)
 
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
-
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        glEnableVertexAttribArray(2);
 
     ////////
     shader.use();//makes it the current rendering state
 
-
+    matts::Texture diffuseMap("container2.png");
+    matts::Texture specular("container2_specular.png");
     glEnable(GL_DEPTH_TEST);
 
     float temp = 0;
@@ -171,14 +174,19 @@ int main(void)
         shader.setVec3("objectColour", glm::vec3(1.0f, 0.5f, 0.31f));
         shader.setVec3("lightPos", lightPos);
 
-        shader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-        shader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
-        shader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-        shader.setFloat("material.shininess", 32.0f);
+
+        shader.setint("material.diffuse",0);
+        shader.setint("material.specular", 1);
+        shader.setFloat("material.shininess", 128.0f);
+
         shader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f) * lightColour);
-        shader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)* glm::vec3(0.2f, 0.2f, 0.2f)* lightColour); // darkened
+        shader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)* lightColour); // darkened
         shader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
         int count = 0;
+        glActiveTexture(GL_TEXTURE0);
+        diffuseMap.use();
+        glActiveTexture(GL_TEXTURE1);
+        specular.use();
         for (glm::vec3 pos : cubePositions) {
             
             glm::mat4 model = glm::mat4(1.0f);
@@ -199,9 +207,9 @@ int main(void)
         //std::cout << 1 / deltaTime << '\n';
         lightPos.x = 5 * cos(temp);
         lightPos.z = 5 * sin(temp);    
-        lightColour.x = sin(glfwGetTime());
-        lightColour.y = sin(glfwGetTime() * 0.7);
-        lightColour.z = sin(glfwGetTime() *0.2);
+        lightColour.x = 1;
+        lightColour.y = 1;
+        lightColour.z = 1;
     }
 
     return 0;
