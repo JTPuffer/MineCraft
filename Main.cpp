@@ -172,17 +172,21 @@ int main(void)
         shader.use();
         glBindVertexArray(VAO);
         shader.setVec3("objectColour", glm::vec3(1.0f, 0.5f, 0.31f));
-        shader.setVec3("lightPos", lightPos);
 
 
         shader.setint("material.diffuse",0);
         shader.setint("material.specular", 1);
         shader.setFloat("material.shininess", 128.0f);
 
-        shader.setVec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-        shader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f) * lightColour);
+        shader.setVec3("light.position", glm::vec3(view* glm::vec4(lightPos, 1.0)));
+        shader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f)* lightColour);
         shader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)* lightColour); // darkened
         shader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+        shader.setFloat("light.constant", 1.0f);
+        shader.setFloat("light.linear", 0.09f);
+        shader.setFloat("light.quadratic", 0.032f);
+        shader.setFloat("light.angleCos", glm::cos(glm::radians(12.5f)));
+        
         int count = 0;
         glActiveTexture(GL_TEXTURE0);
         diffuseMap.use();
