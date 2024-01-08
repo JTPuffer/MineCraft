@@ -14,7 +14,8 @@ struct Material {
 uniform Material material;
 
 struct Light { 
-    vec3 position;
+    //vec3 position;
+    vec3 direction;
     vec3 ambient;
     vec3 diffuse; 
     vec3 specular;
@@ -31,7 +32,7 @@ void main()
 
     //diffuse
     vec3 norm = normalize(Normal); 
-    vec3 lightDir = normalize(lightPosOut - FragPos);
+    vec3 lightDir = normalize(-light.direction);
    
     float scaler = max( dot(norm,lightDir),0.0); // gives a ratio of how clost to perpendicular and adjusts the light based on that
     vec3 diffuse = light.diffuse * scaler * vec3(texture(material.diffuse,TexCoords));

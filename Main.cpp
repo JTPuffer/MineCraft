@@ -179,6 +179,7 @@ int main(void)
         shader.setint("material.specular", 1);
         shader.setFloat("material.shininess", 128.0f);
 
+        shader.setVec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
         shader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f) * lightColour);
         shader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f)* lightColour); // darkened
         shader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -193,7 +194,7 @@ int main(void)
 
             model = glm::translate(model, pos);
 
-            //model = glm::rotate(model, glm::radians(count * 20.0f + temp*100), glm::vec3(1.0f, 0.3f, 0.5f));
+            model = glm::rotate(model, glm::radians(count * 20.0f + temp*100), glm::vec3(1.0f, 0.3f, 0.5f));
             //model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
             shader.setmat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
