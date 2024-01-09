@@ -259,7 +259,7 @@ int main(void)
         lightColour.y = 1;
         lightColour.z = 1;
     }
-
+    ErrorLogger::shutdown();
     return 0;
 }
 
