@@ -10,6 +10,7 @@
 #include "camera.h"
 #include "ResourceManager.h"
 #include "Texture.h"
+#include "ErrorLogger.h"
 #define Width 1200
 #define Height 1200
 #define sense 0.1
@@ -59,6 +60,7 @@ glm::vec3 lightPos(2.2f, 1.0f, -1.0f);
 
 int main(void)
 {
+    ErrorLogger::init("log.txt");
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);//option then the value 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -68,7 +70,7 @@ int main(void)
     GLFWwindow* window = glfwCreateWindow(Width, Height, "MineCraft", NULL, NULL);
 
     if (window == NULL) {
-        std::cout << "well that didnt work ";
+        ErrorLogger::log("well that didnt work ");
         glfwTerminate();
         return -1;
     }
@@ -84,7 +86,7 @@ int main(void)
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { // give glad the address of all the open gl function pointeres, glfwGet gets teh address for this os
 
-        std::cout << "failed to init glad";
+        ErrorLogger::log("failed to init glad");
         return -1;
     }
     glViewport(0, 0, Width, Height);// tell opengl size of the window 1st 2 set the location of the top left
@@ -138,7 +140,7 @@ int main(void)
     glm::vec3 lightColour(1.0f, 1.0f, 1.0f);
     while (!glfwWindowShouldClose(window))
     {
-        thisFrame = glfwGetTime();
+        thisFrame = (float)glfwGetTime();
         deltaTime = thisFrame - lastFrame;
         lastFrame = thisFrame;
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -251,7 +253,7 @@ int main(void)
  
         glfwSwapBuffers(window);
         glfwPollEvents();
-        temp += 0.001;
+        temp += 0.001f;
         //std::cout << 1 / deltaTime << '\n';
         lightColour.x = 1;
         lightColour.y = 1;

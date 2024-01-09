@@ -42,6 +42,9 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\resourceLoaderthings</Filter>
     </ClCompile>
+    <ClCompile Include="ErrorLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -62,6 +65,9 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Header Files\resourceLoaderthings</Filter>
     </ClInclude>
+    <ClInclude Include="ErrorLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShader.glsl">
@@ -81,5 +87,10 @@
     <Image Include="container2_specular.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="log.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

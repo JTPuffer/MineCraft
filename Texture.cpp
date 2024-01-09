@@ -1,13 +1,13 @@
 #include "Texture.h"
 
-Texture::Texture() : width(0), height(0), Image_Format(GL_RGB) { glGenTextures(1, &textureData); }
+
 
 
 void Texture::Generate(unsigned int width, unsigned int height, unsigned char* data,unsigned int nrChannels)
 {
 	this->width = width;
 	this->height = height;
-	GLenum format;
+	GLenum format = GL_RGB;
 	switch (nrChannels)
 	{
 	case 1:
@@ -31,7 +31,6 @@ void Texture::Generate(unsigned int width, unsigned int height, unsigned char* d
 
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
-
 }
 
 void Texture::use()

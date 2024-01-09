@@ -12,7 +12,7 @@ void Shader::Compile(const char* vertexSource, const char* fragmentSource)
 
 	if (!success) {
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog  << std::endl;
+		ErrorLogger::log("ERROR::SHADER::VERTEX::COMPILATION_FAILED " + std::string(infoLog, strlen(infoLog)));
 		return;
 	}
 	unsigned int vertextShader;
@@ -22,7 +22,7 @@ void Shader::Compile(const char* vertexSource, const char* fragmentSource)
 	glGetShaderiv(vertextShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(vertextShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		ErrorLogger::log("ERROR::SHADER::VERTEX::COMPILATION_FAILED" + std::string(infoLog, strlen(infoLog)));
 		return;
 	}
 
@@ -38,7 +38,7 @@ void Shader::Compile(const char* vertexSource, const char* fragmentSource)
 	glGetProgramiv(id, GL_LINK_STATUS, &success);
 	if (!success) {
 		glGetProgramInfoLog(id, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::LINKINGERROR\n" << infoLog << std::endl;
+		ErrorLogger::log("ERROR::SHADER::LINKINGERROR" + std::string(infoLog, strlen(infoLog)));
 	}
 }
 

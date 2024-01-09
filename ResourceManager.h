@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include <glad/glad.h>
+#include "ErrorLogger.h"
 
 class ResourceManager
 {
@@ -16,8 +17,8 @@ class ResourceManager
 
 	ResourceManager() {};
 public:
-	static Shader loadShader(const char* vShaderFile, const char* fShaderFile, std::string name);
-	static Texture loadTexture(const char* file, std::string name);
+	static Shader loadShader(const std::string vShaderFile, const std::string fShaderFile, std::string name);
+	static Texture loadTexture(const std::string file,const  std::string name);
 	static Texture GetTexture(std::string name);
 	static Shader  GetShader(std::string name);
 };

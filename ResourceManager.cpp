@@ -3,7 +3,7 @@
 std::map<std::string, Shader> ResourceManager::Shaders;
 std::map<std::string, Texture> ResourceManager::Textures;
 
-Shader ResourceManager::loadShader(const char* vShaderFile, const char* fShaderFile, std::string name)
+Shader ResourceManager::loadShader(std::string vShaderFile, std::string fShaderFile, std::string name)
 {
 	std::string vertexCode;
 	std::string fragmentCode; // does colour
@@ -12,7 +12,7 @@ Shader ResourceManager::loadShader(const char* vShaderFile, const char* fShaderF
 	std::ifstream fragFile(fShaderFile, std::ios::in);
 
 	if (!(vertFile.is_open() && fragFile.is_open())) {
-		std::cout << "couldnt open files" << vShaderFile << fShaderFile;
+		ErrorLogger::log("couldnt open files"+ vShaderFile + fShaderFile);
 		return Shader();
 	}
 	try
@@ -30,7 +30,7 @@ Shader ResourceManager::loadShader(const char* vShaderFile, const char* fShaderF
 	}
 	catch (std::ifstream::failure e)
 	{
-		std::cout << "failed to read files";
+		ErrorLogger::log("failed to read files" + vShaderFile + fShaderFile);
 	}
 
 
@@ -43,18 +43,18 @@ Shader ResourceManager::loadShader(const char* vShaderFile, const char* fShaderF
     return shader;
 }
 
-Texture ResourceManager::loadTexture(const char* file, std::string name)
+Texture ResourceManager::loadTexture(const std::string file, std::string name)
 {
 	Texture texture;
 	int width, height, nrChannels;
-	unsigned char * data = stbi_load(file, &width, &height,&nrChannels, 0);
+	unsigned char * data = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
 
 
 	if (data) {
 		texture.Generate(width, height, data, nrChannels);
 	}
 	else {
-		std::cout << " cant load data";
+		ErrorLogger::log(" cant load data"+ file);
 	}
 	stbi_image_free(data);
 	Textures[name] = texture;
