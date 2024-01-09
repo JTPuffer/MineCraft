@@ -1,5 +1,5 @@
 #pragma once
-#include "stb_image.h"
+
 #include <glad/glad.h> // include glad to get the required OpenGL headers
 
 #include <iostream>
@@ -9,7 +9,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-namespace matts {
 	class Texture
 	{
 
@@ -18,9 +17,9 @@ namespace matts {
 		unsigned char* data;
 		unsigned int textureData;
 	public:
-		Texture(const char* path);
+		unsigned int Image_Format; // format of loaded image
 
+		Texture();
+		void Generate(unsigned int width, unsigned int height, unsigned char* data, unsigned int nrChannels);
 		void use();
 	};
-
-}

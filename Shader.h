@@ -24,10 +24,10 @@ class Shader
 public:
 	unsigned int id;
 
-	Shader(const char* vertexPath, const char * fragmentPath);
+	Shader() : id(0){};
 
 	void use();
-
+	void  Compile(const char* vertexSource, const char* fragmentSource);
 	void setmat4(const char * uniformName, glm::mat4 matrix);
 
 	void setVec3(const char* uniformName, glm::vec3 vec);

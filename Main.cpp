@@ -8,7 +8,7 @@
 
 #include "Shader.h"
 #include "camera.h"
-#include "Block.h"
+#include "ResourceManager.h"
 #include "Texture.h"
 #define Width 1200
 #define Height 1200
@@ -90,11 +90,10 @@ int main(void)
     glViewport(0, 0, Width, Height);// tell opengl size of the window 1st 2 set the location of the top left
 
 
-    Shader shader = Shader("VertexShader.vert", "FragmentShader.glsl");
+    Shader shader = ResourceManager::loadShader("VertexShader.vert", "FragmentShader.glsl","forblocks");
 
-    Shader light = Shader("VertexShader.vert", "light.frag");
+    Shader light = ResourceManager::loadShader("VertexShader.vert", "light.frag","forlight");
 
-    Block block = Block();
 
     /////////
     unsigned int VBO;// vertext buffer object holds the points
@@ -127,8 +126,8 @@ int main(void)
     ////////
     shader.use();//makes it the current rendering state
 
-    matts::Texture diffuseMap("container2.png");
-    matts::Texture specular("container2_specular.png");
+    Texture diffuseMap = ResourceManager::loadTexture("container2.png","diffuesmap");
+    Texture specular = ResourceManager::loadTexture("container2_specular.png","specular");
     glEnable(GL_DEPTH_TEST);
 
     float temp = 0;
@@ -145,8 +144,6 @@ int main(void)
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        block.use();
-        
         // camera/view transformation
         glm::mat4 view = camera.GetViewMatrix();
         shader.setmat4("view", view);
@@ -161,11 +158,7 @@ int main(void)
         // render the triangle
 
 
-        light.use(); 
-
-
-
-
+        light.use();
         light.setmat4("view", view);
         light.setmat4("projection", projection);
         light.setVec3("lightColour", lightColour);
@@ -176,18 +169,19 @@ int main(void)
             model = glm::translate(model, pos);
             model = glm::scale(model, glm::vec3(0.2f));
             light.setmat4("model", model);
-            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+            //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
         }
         shader.use();
         glBindVertexArray(VAO);
         shader.setVec3("objectColour", glm::vec3(1.0f, 0.5f, 0.31f));
 
 
-        shader.setint("material.diffuse",0);
+        shader.setint("material.diffuse", 0);
         shader.setint("material.specular", 1);
         shader.setFloat("material.shininess", 128.0f);
 
-        shader.setVec3("dirLight.direction", glm::vec3( - 0.2f, -1.0f, -0.3f));
+        shader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
         shader.setVec3("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
         shader.setVec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
         shader.setVec3("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
@@ -234,19 +228,19 @@ int main(void)
         shader.setFloat("spotLight.quadratic", 0.032f);
         shader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
         shader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
-        
+
         int count = 0;
         glActiveTexture(GL_TEXTURE0);
         diffuseMap.use();
         glActiveTexture(GL_TEXTURE1);
         specular.use();
         for (glm::vec3 pos : cubePositions) {
-            
+
             glm::mat4 model = glm::mat4(1.0f);
 
             model = glm::translate(model, pos);
 
-            model = glm::rotate(model, glm::radians(count * 20.0f + temp*100), glm::vec3(1.0f, 0.3f, 0.5f));
+            model = glm::rotate(model, glm::radians(count * 20.0f + temp * 100), glm::vec3(1.0f, 0.3f, 0.5f));
             //model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
             shader.setmat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -254,6 +248,7 @@ int main(void)
         }
 
 
+ 
         glfwSwapBuffers(window);
         glfwPollEvents();
         temp += 0.001;
