@@ -27,6 +27,7 @@ float deltaTime = 0.0f; // Time between current frame and last frame
 glm::vec3 lightPos(2.2f, 1.0f, -1.0f);
 
 Game *g;
+
 int main(void)
 {
     ErrorLogger::init("log.txt");
@@ -66,7 +67,7 @@ int main(void)
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     float temp = 0;
-
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     float lastFrame = 0.0f; // Time of last frame
     float thisFrame = 0.0f;
     g->Init();

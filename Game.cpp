@@ -24,6 +24,10 @@ void Game::Init()
 
     shader.setint("material.diffuse", 0);
     shader.setint("material.specular", 1);
+    shader.setVec2("material.top", glm::vec2(0.0, 0.0));
+    shader.setVec2("material.bottom", glm::vec2(0.125, 0.0));
+    shader.setVec2("material.side", glm::vec2(0.1875, 0.0));
+
     shader.setFloat("material.shininess", 128.0f);
     // sun
     shader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
@@ -57,8 +61,8 @@ void Game::Init()
     light.setVec3("lightColour", glm::vec3(1.0,1.0,1.0));
     renderLight = new BlockRenderer(light);
 
-    diff =  ResourceManager::loadTexture("container2.png", "diffuesmap");
-    spec = ResourceManager::loadTexture("container2_specular.png", "specular");
+    diff =  ResourceManager::loadTexture("terrain.png", "diffuesmap");
+    spec = ResourceManager::loadTexture("terrain.png", "specular");
 
 
 }

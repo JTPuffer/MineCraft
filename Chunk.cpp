@@ -10,12 +10,31 @@ Chunk::Chunk(Shader& shader)
         glm::vec3(0.0f, 0.0f, -3.0f)
     };
     for (int x = 0; x < CHUNK_SIZE; ++x) {
-        for (int y = 0; y < CHUNK_SIZE; ++y) {
-            for (int z = 0; z < CHUNK_SIZE; ++z) {
-                blocks[x][y][z] = STONE;
+        for (int z = 0; z < CHUNK_SIZE; ++z) {
+            // Scale the coordinates to control the frequency of the Perlin noise
+            float scaledX = (float)x / 20.0f;
+            float scaledZ = (float)z / 20.0f;
+
+            // Generate Perlin noise for the scaled position
+            float perlinValue = 0.5f * (1.0f + perlin(scaledX, scaledZ));
+
+            // Linearly interpolate the height based on the scaled Perlin noise value
+            float minHeight = 0.0f;
+            float maxHeight = CHUNK_SIZE;  // Adjust this value for the maximum height
+
+            float height = minHeight + (maxHeight - minHeight) * perlinValue;
+
+            // Loop through the y-axis based on the calculated height
+            for (int y = 0; y < height; ++y) {
+                blocks[x][y][z] = STONE;  // Set to STONE within the height range
+            }
+            // Set the rest to AIR
+            for (int y = height; y < CHUNK_SIZE; ++y) {
+                blocks[x][y][z] = EMPTY;
             }
         }
     }
+
     initRenderData();
 }
 
@@ -67,17 +86,17 @@ void Chunk::DrawChunk(Texture diffuse, Texture specular, glm::vec3 position, Cam
 bool Chunk::isAir(int x,int y,int z) {
     bool temp = false;
 
-    temp = (y > 0) ? (blocks[x][y - 1][z] == 0) : true;
+    temp = (y > 0) ? (blocks[x][y - 1][z] == EMPTY) : true;
     // Top face
-    temp |=  (y < CHUNK_SIZE - 1) ? (blocks[x][y + 1][z] == 0) : true;
+    temp |=  (y < CHUNK_SIZE - 1) ? (blocks[x][y + 1][z] == EMPTY) : true;
     // Front face
-    temp |=  (z > 0) ? (blocks[x][y][z - 1] == 0) : true;
+    temp |=  (z > 0) ? (blocks[x][y][z - 1] == EMPTY) : true;
     // Back face
-    temp |=  (z < CHUNK_SIZE - 1) ? (blocks[x][y][z + 1] == 0) : true;
+    temp |=  (z < CHUNK_SIZE - 1) ? (blocks[x][y][z + 1] == EMPTY) : true;
     // Left face
-    temp |=  (x > 0) ? (blocks[x - 1][y][z] == 0) : true;
+    temp |=  (x > 0) ? (blocks[x - 1][y][z] == EMPTY) : true;
     // Right face
-    temp |=  (x < CHUNK_SIZE - 1) ? (blocks[x + 1][y][z] == 0) : true;
+    temp |=  (x < CHUNK_SIZE - 1) ? (blocks[x + 1][y][z] == EMPTY) : true;
 
     return temp;
 }
@@ -86,8 +105,11 @@ void Chunk::initRenderData()
     for (int x = 0; x < CHUNK_SIZE; ++x) {
         for (int y = 0; y < CHUNK_SIZE; ++y) {
             for (int z = 0; z < CHUNK_SIZE; ++z) {
-                if (isAir(x,y,z)) {
-                    visibleBlocks.push_back(glm::vec3(x, y, z));
+                if (blocks[x][y][z] != EMPTY) {
+                    if (isAir(x, y, z)) {
+                        visibleBlocks.push_back(glm::vec3(x, y, z));
+                        
+                    }
                 }
             }
         }

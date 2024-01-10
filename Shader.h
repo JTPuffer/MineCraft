@@ -31,6 +31,7 @@ public:
 	void  Compile(const char* vertexSource, const char* fragmentSource);
 	void setmat4(const char * uniformName, glm::mat4 matrix);
 
+	void setVec2(const char* uniformName, glm::vec2 vec);
 	void setVec3(const char* uniformName, glm::vec3 vec);
 	void setFloat(const char* uniformName, float f);
 	void setint(const char* uniformName, int i);

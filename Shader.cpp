@@ -54,6 +54,11 @@ void Shader::setmat4(const char* uniformName, glm::mat4 matrix)
 		, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+void Shader::setVec2(const char* uniformName, glm::vec2 vec)
+{
+	glUniform2fv(glGetUniformLocation(id, uniformName), 1, glm::value_ptr(vec));
+}
+
 void Shader::setVec3(const char* uniformName, glm::vec3 vec)
 {
 	glUniform3fv(glGetUniformLocation(id, uniformName),1,  glm::value_ptr(vec));

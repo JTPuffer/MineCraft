@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "camera.h"
-
+#include "PerlinNoise.h"
 #define CHUNK_SIZE 16
 enum BlockType : uint8_t {
 	EMPTY = 0,
@@ -34,6 +34,7 @@ private:
 	std::vector<glm::vec3> visibleBlocks;  // Light positions
 	void initRenderData();
 	bool isAir(int x, int y, int z);
+
 
 };
 
