@@ -70,3 +70,10 @@ void Shader::setint(const char* uniformName, int i)
 
 }
 
+void Shader::setarr3(const char* uniformName,std::vector<glm::vec3>& vec)
+{
+	// Set light positions as a uniform array
+	glUniform3fv(glGetUniformLocation(id, uniformName), vec.size(), &vec[0][0]);
+
+}
+

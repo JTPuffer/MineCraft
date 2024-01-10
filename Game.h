@@ -1,4 +1,7 @@
 #pragma once
+#include "ResourceManager.h"
+#include "camera.h"
+#include "BlockRenderer.h"
 enum GameState {
 	GAME_ACTIVE,
 	GAME_MENU,
@@ -8,11 +11,16 @@ enum GameState {
 
 class Game
 {
+
+	BlockRenderer *renderer;
+	BlockRenderer* renderLight;
+	Texture diff;
+	Texture spec;
 public:
 	// game state
 	GameState State;
 	bool Keys[1024];
-	unsigned int Width, Height;
+	unsigned int width, height;
 	// constructor/destructor
 	Game(unsigned int width, unsigned int height);
 	~Game();
@@ -22,4 +30,5 @@ public:
 	void ProcessInput(float dt);
 	void Update(float dt);
 	void Render();
+	Camera camera;
 };

@@ -17,7 +17,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include <vector>
 #include "ErrorLogger.h"
 
 class Shader
@@ -34,5 +34,6 @@ public:
 	void setVec3(const char* uniformName, glm::vec3 vec);
 	void setFloat(const char* uniformName, float f);
 	void setint(const char* uniformName, int i);
+	void setarr3(const char* uniformName, std::vector<glm::vec3>& vec);
 };
 

@@ -20,7 +20,6 @@ struct DirLight {
 
 
 struct PointLight {
-    vec3 position;
     float constant;
     float linear;
     float quadratic;
@@ -48,23 +47,25 @@ struct SpotLight {
 #define NR_POINT_LIGHTS 4
 
 uniform Material material;
-uniform PointLight pointLights[NR_POINT_LIGHTS];
+uniform vec3  pointLightPositions[NR_POINT_LIGHTS];
+
+uniform PointLight pointLight;
 uniform DirLight dirLight;
 uniform SpotLight spotLight;
 
 uniform vec3 viewPos;
 
 
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec3 CalcPointLight(PointLight light,vec3 position, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-    vec3 lightDir = normalize(light.position - fragPos);
+    vec3 lightDir = normalize(position - fragPos);
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
     // specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // attenuation
-    float distance = length(light.position - fragPos);
+    float distance = length(position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
     // combine results
     vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
@@ -101,7 +102,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
     float epsilon = light.cutOff - light.outerCutOff;
     float i = clamp((theta -light.outerCutOff) / epsilon,0.0,1.0);
-        return i * CalcPointLight(PointLight(light.position,light.constant,light.linear,light.quadratic,light.ambient,light.diffuse,light.specular),normal,fragPos,viewDir); // tried to cast it it told me off
+        return i * CalcPointLight(PointLight(light.constant,light.linear,light.quadratic,light.ambient,light.diffuse,light.specular),light.position,normal,fragPos,viewDir); // tried to cast it it told me off
     
     return vec3(0,0,0);
 }
@@ -117,7 +118,7 @@ void main()
 
     // phase 2: Point lights
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
-        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+        result += CalcPointLight(pointLight,  pointLightPositions[i], norm, FragPos, viewDir);
 
     // phase 3: Spot light
     result += CalcSpotLight(spotLight, norm, FragPos, viewDir);

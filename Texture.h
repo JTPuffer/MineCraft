@@ -1,6 +1,5 @@
 #pragma once
 
-#include <glad/glad.h> // include glad to get the required OpenGL headers
 
 #include <iostream>
 

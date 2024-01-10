@@ -61,12 +61,12 @@ Texture ResourceManager::loadTexture(const std::string file, std::string name)
     return texture;
 }
 
-Texture ResourceManager::GetTexture(std::string name)
+ Texture & ResourceManager::GetTexture(const std::string name)
 {
-	return Texture();
+	return Textures[name];
 }
 
-Shader ResourceManager::GetShader(std::string name)
+ Shader& ResourceManager::GetShader(const std::string name)
 {
-	return Shader();
+	return Shaders[name];
 }
