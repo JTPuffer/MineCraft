@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BlockRenderer.cpp" />
+    <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="BlockRenderer.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="Chunk.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -168,6 +170,7 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="chunk.vs" />
     <None Include="FragmentShader.glsl" />
     <None Include="light.frag" />
     <None Include="vertexShader.vert" />

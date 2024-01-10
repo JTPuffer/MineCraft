@@ -13,7 +13,7 @@ Game::~Game()
 
 void Game::Init()
 {
-    Shader shader = ResourceManager::loadShader("VertexShader.vert", "FragmentShader.glsl", "forblocks");
+    Shader shader = ResourceManager::loadShader("chunk.vs", "FragmentShader.glsl", "forChunk");
     Shader light = ResourceManager::loadShader("VertexShader.vert", "light.frag", "forlight");
 
     camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -49,7 +49,7 @@ void Game::Init()
     shader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
     shader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
-    renderer = new BlockRenderer(shader);
+    renderer = new Chunk(shader);
     renderer->setProjectionViewMatrix(projection);
 
     light.use();
@@ -82,22 +82,9 @@ glm::vec3 cubePositions[] = { glm::vec3(0.0f, 0.0f, 0.0f),
                                 glm::vec3(1.5f, 0.2f, -1.5f),
                                 glm::vec3(-1.3f, 1.0f, -1.5f)
 };
-
 void Game::Render()
 {
-    glm::vec3 lightPositions[4] = {
-        glm::vec3(0.7f, 0.2f, 2.0f),
-        glm::vec3(2.3f, -3.3f, -4.0f),
-        glm::vec3(-4.0f, 2.0f, -12.0f),
-        glm::vec3(0.0f, 0.0f, -3.0f)
-    };
-    for (glm::vec3 pos : cubePositions) {
-        renderer->DrawBlock(diff, spec, pos, camera);
-    }
-
-    
-    for (glm::vec3 pos : lightPositions) {
-        renderLight->DrawBlock(diff, spec, pos, camera);
-    }
-
+    renderer->DrawChunk(diff,spec,glm::vec3(0.0,0.0,0.0), camera);
 }
+
+

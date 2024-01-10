@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "camera.h"
 #include "BlockRenderer.h"
+#include "Chunk.h"
 enum GameState {
 	GAME_ACTIVE,
 	GAME_MENU,
@@ -12,7 +13,7 @@ enum GameState {
 class Game
 {
 
-	BlockRenderer *renderer;
+	Chunk *renderer;
 	BlockRenderer* renderLight;
 	Texture diff;
 	Texture spec;

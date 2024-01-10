@@ -63,26 +63,25 @@ int main(void)
     g = new Game(Width, Height);
 
     glEnable(GL_DEPTH_TEST);
-
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     float temp = 0;
 
     float lastFrame = 0.0f; // Time of last frame
     float thisFrame = 0.0f;
- 
     g->Init();
     while (!glfwWindowShouldClose(window))
     {
         thisFrame = (float)glfwGetTime();
         deltaTime = thisFrame - lastFrame;
         lastFrame = thisFrame;
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(135.0 / 255.0, 206.0 / 255.0, 235.0 / 255.0, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         
         processInput(window);
 
         // render the triangle
-
 
 
         g->Render();

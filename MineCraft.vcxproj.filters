@@ -48,6 +48,9 @@
     <ClCompile Include="BlockRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Chunk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -74,6 +77,9 @@
     <ClInclude Include="BlockRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShader.glsl">
@@ -83,6 +89,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="vertexShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="chunk.vs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
