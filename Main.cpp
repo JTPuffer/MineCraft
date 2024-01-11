@@ -65,7 +65,7 @@ int main(void)
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    glCullFace(GL_FRONT);
     float temp = 0;
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     float lastFrame = 0.0f; // Time of last frame

@@ -31,7 +31,7 @@ private:
 	unsigned int instanceVBO;
 	glm::mat4 projectionViewMatrix;  // Projection-view matrix
 	std::vector<glm::vec3> lightPositions;  // Light positions
-	std::vector<glm::vec3> visibleBlocks;  // Light positions
+	std::vector<glm::vec4> visibleBlocks;  // Light positions
 	void initRenderData();
 	bool isAir(int x, int y, int z);
 

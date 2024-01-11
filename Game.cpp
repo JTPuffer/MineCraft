@@ -22,13 +22,13 @@ void Game::Init()
 
     shader.use();
 
-    shader.setint("material.diffuse", 0);
-    shader.setint("material.specular", 1);
-    shader.setVec2("material.top", glm::vec2(0.0, 0.0));
-    shader.setVec2("material.bottom", glm::vec2(0.125, 0.0));
-    shader.setVec2("material.side", glm::vec2(0.1875, 0.0));
+    shader.setint("materials[1].diffuse", 0);
+    shader.setint("materials[1].specular", 1);
+    shader.setVec2("materials[1].top", glm::vec2(0.0, 0.0));
+    shader.setVec2("materials[1].bottom", glm::vec2(0.125, 0.0));
+    shader.setVec2("materials[1].side", glm::vec2(0.1875, 0.0));
 
-    shader.setFloat("material.shininess", 128.0f);
+    shader.setFloat("materials[1].shininess", 128.0f);
     // sun
     shader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
     shader.setVec3("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));

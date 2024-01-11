@@ -107,64 +107,64 @@ void Chunk::initRenderData()
             for (int z = 0; z < CHUNK_SIZE; ++z) {
                 if (blocks[x][y][z] != EMPTY) {
                     if (isAir(x, y, z)) {
-                        visibleBlocks.push_back(glm::vec3(x, y, z));
-                        
+                        visibleBlocks.push_back(glm::vec4(x, y, z,1));
                     }
                 }
             }
         }
     }
-
+    
     glGenBuffers(1, &instanceVBO);
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * visibleBlocks.size(), &visibleBlocks[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * visibleBlocks.size(), &visibleBlocks[0], GL_STATIC_DRAW);
+
 
     // Assuming 'instanceVBO' is the VBO for instance positions
     
 
     float vertices[] = {
-        // back face                                
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,           0.0f, 0.0f, // bottom-left
-        0.5f, 0.5f, -0.5f, 1.0f, 1.0f, -1.0f,        1.0f, 1.0f, // top-right
-        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, -1.0f,           1.0f, 0.0f, // bottom-right
-        0.5f, 0.5f, -0.5f, 1.0f, 1.0f, -1.0f,        1.0f, 1.0f, // top-right
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,          0.0f, 0.0f, // bottom-left
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, -1.0f,           0.0f, 1.0f, // top-left
-        // front face
-        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,         0.0f, 0.0f, // bottom-left
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 1.0f,         1.0f, 0.0f, // bottom-right
-        0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f,          1.0f, 1.0f, // top-right
-        0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f,          1.0f, 1.0f, // top-right
-        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 1.0f,         0.0f, 1.0f, // top-left
-        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,            0.0f, 0.0f, // bottom-left
-        // left face
-        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,         1.0f, 0.0f, // top-right
-        -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f,         1.0f, 1.0f, // top-left
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,            0.0f, 1.0f, // bottom-left
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,           0.0f, 1.0f, // bottom-left
-        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f,            0.0f, 0.0f, // bottom-right
-        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,         1.0f, 0.0f, // top-right
-        // right face
-        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,          1.0f, 0.0f, // top-left
-        0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,         0.0f, 1.0f, // bottom-right
-        0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f,         1.0f, 1.0f, // top-right
-        0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,         0.0f, 1.0f, // bottom-right
-        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,          1.0f, 0.0f, // top-left
-        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f,             0.0f, 0.0f, // bottom-left
-        // bottom face
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,            0.0f, 1.0f, // top-right
-        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f,             1.0f, 1.0f, // top-left
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,             1.0f, 0.0f, // bottom-left
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,             1.0f, 0.0f, // bottom-left
-        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f,            0.0f, 0.0f, // bottom-right
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,           0.0f, 1.0f, // top-right
-        // top face
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,            0.0f, 1.0f, // top-left
-        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,               1.0f, 0.0f, // bottom-right
-        0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f,              1.0f, 1.0f, // top-right
-        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,              1.0f, 0.0f, // bottom-right
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,             0.0f, 1.0f, // top-left
-        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f,             0.0f, 0.0f // bottom-left
+        // Back face changed text cords casue they be upside down in game
+        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,                    // Bottom-left
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,                   // bottom-right    
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f,                   // top-right              
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f,                   // top-right
+        -0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,                   // top-left
+        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,                   // bottom-left                
+        // Front face
+        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,                    // bottom-left
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,                    // top-right
+         0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,                    // bottom-right        
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,                    // top-right
+        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,                    // bottom-left
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,                    // top-left        
+        // Left face
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f,                    // top-right
+        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, -1.0f, 0.0f, 0.0f,                    // bottom-left
+        -0.5f,  0.5f, -0.5f,  1.0f, 0.0f, -1.0f, 0.0f, 0.0f,                    // top-left       
+        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, -1.0f, 0.0f, 0.0f,                    // bottom-left
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f,                    // top-right
+        -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, -1.0f, 0.0f, 0.0f,                    // bottom-right
+        // Right face
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,                   // top-left
+         0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f,                   // top-right      
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,  1.0f, 0.0f, 0.0f,                   // bottom-right          
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,  1.0f, 0.0f, 0.0f,                   // bottom-right
+         0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  1.0f, 0.0f, 0.0f,                   // bottom-left
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,                   // top-left
+         // Bottom face          
+         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f,                    // top-right
+          0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,                    // bottom-left
+          0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, -1.0f, 0.0f,                    // top-left        
+          0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,                    // bottom-left
+         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f,                    // top-right
+         -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, -1.0f, 0.0f,                    // bottom-right
+         // Top face
+         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f,                   // top-left
+          0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f,                   // top-right
+          0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f,                   // bottom-right                 
+          0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f,                   // bottom-right
+         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f,                   // bottom-left  
+         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f                   // top-left              
     };
 
     glGenBuffers(1, &VBO);
@@ -179,14 +179,13 @@ void Chunk::initRenderData()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);//tells open gl the format of the data given
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); // Note: attribute location is 3
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0); // Note: attribute location is 3
     glEnableVertexAttribArray(3);
     glVertexAttribDivisor(3, 1); // This makes sure that the VBO advances once per instance
-
 }
