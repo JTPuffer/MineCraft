@@ -17,12 +17,18 @@ uniform mat4 projection;
 
 void main() {
 
+
     vec3 position = vec3( aPos.x +aOffset.x, aPos.y +aOffset.y, aPos.z +aOffset.z) ;
-    vec4 worldPos = vec4(position, 1.0);
-    MaterialIndex=int(aOffset.w);
+
+    vec4 worldPos = model * vec4(position, 1.0);
+
+    MaterialIndex=int(uint(aOffset.w) >> 6);
     FragPos = vec3(worldPos);
     Normal = mat3(transpose(inverse(model))) * aNormal;  
     BasicTexCoords = aTexCoords;
-    gl_Position = projection * view * worldPos;
+    gl_Position = projection * view*  worldPos;
 
-}
+}   
+
+
+

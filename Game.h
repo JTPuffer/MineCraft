@@ -1,7 +1,7 @@
 #pragma once
 #include "ResourceManager.h"
 #include "camera.h"
-#include "BlockRenderer.h"
+#include "RenderChunk.h"
 #include "Chunk.h"
 enum GameState {
 	GAME_ACTIVE,
@@ -12,9 +12,7 @@ enum GameState {
 
 class Game
 {
-
-	Chunk *renderer;
-	BlockRenderer* renderLight;
+	RenderChunk*renderer;
 	Texture diff;
 	Texture spec;
 public:
@@ -32,4 +30,5 @@ public:
 	void Update(float dt);
 	void Render();
 	Camera camera;
+	std::vector<Chunk> chunks;
 };

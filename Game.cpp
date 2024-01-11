@@ -17,7 +17,7 @@ void Game::Init()
     Shader light = ResourceManager::loadShader("VertexShader.vert", "light.frag", "forlight");
 
     camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)width / (float)height, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)width / (float)height, 0.1f, 200.0f);
     glEnable(GL_DEPTH_TEST);
 
     shader.use();
@@ -27,8 +27,14 @@ void Game::Init()
     shader.setVec2("materials[1].top", glm::vec2(0.0, 0.0));
     shader.setVec2("materials[1].bottom", glm::vec2(0.125, 0.0));
     shader.setVec2("materials[1].side", glm::vec2(0.1875, 0.0));
-
     shader.setFloat("materials[1].shininess", 128.0f);
+
+    shader.setint("materials[2].diffuse", 0);
+    shader.setint("materials[2].specular", 1);
+    shader.setVec2("materials[2].top", glm::vec2(0.125, 0.0));
+    shader.setVec2("materials[2].bottom", glm::vec2(0.125, 0.0));
+    shader.setVec2("materials[2].side", glm::vec2(0.125, 0.0));
+    shader.setFloat("materials[2].shininess", 128.0f);
     // sun
     shader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
     shader.setVec3("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
@@ -53,18 +59,20 @@ void Game::Init()
     shader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
     shader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
-    renderer = new Chunk(shader);
-    renderer->setProjectionViewMatrix(projection);
 
-    light.use();
-    light.setmat4("projection", projection);
-    light.setVec3("lightColour", glm::vec3(1.0,1.0,1.0));
-    renderLight = new BlockRenderer(light);
 
     diff =  ResourceManager::loadTexture("terrain.png", "diffuesmap");
     spec = ResourceManager::loadTexture("terrain.png", "specular");
 
+    renderer = new RenderChunk(shader,diff,spec);
+    renderer->setProjectionViewMatrix(projection);
 
+    for (int i = 0; i < 4; ++i) {
+            for (int k = 0; k < 4; ++k) {
+                glm::vec3 chunkPosition(i * CHUNK_SIZE, 0, k * CHUNK_SIZE);
+                chunks.push_back(Chunk(chunkPosition)); // Create and add a new chunk to the vector
+            }
+    }
 }
 
 void Game::ProcessInput(float dt)
@@ -88,7 +96,8 @@ glm::vec3 cubePositions[] = { glm::vec3(0.0f, 0.0f, 0.0f),
 };
 void Game::Render()
 {
-    renderer->DrawChunk(diff,spec,glm::vec3(0.0,0.0,0.0), camera);
+    for (Chunk c : chunks)
+        renderer->draw(c, camera);
 }
 
 
