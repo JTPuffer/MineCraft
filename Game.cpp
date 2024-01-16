@@ -38,7 +38,7 @@ void Game::Init()
     // sun
     shader.setVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
     shader.setVec3("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-    shader.setVec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+    shader.setVec3("dirLight.diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
     shader.setVec3("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 
 
@@ -96,8 +96,12 @@ glm::vec3 cubePositions[] = { glm::vec3(0.0f, 0.0f, 0.0f),
 };
 void Game::Render()
 {
-    for (Chunk c : chunks)
+
+    //std::cout << camera.getvec().x << camera.getvec().y << camera.getvec().z << '\n';
+    for (Chunk c : chunks) {
         renderer->draw(c, camera);
+
+    }
 }
 
 

@@ -109,7 +109,9 @@ public:
         if (Zoom > 45.0f)
             Zoom = 45.0f;
     }
-
+    glm::vec3 getvec() {
+        return Front + Position;
+    }
 private:
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors()

@@ -55,69 +55,23 @@ void RenderChunk::draw(Chunk& chunk,  Camera& cam)
     shader.setmat4("view", cam.GetViewMatrix());
 
     glBindVertexArray(quadVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, chunk.getInstanceVBO());
-    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0); // for some reason gotta tell them again ??
+    glBindBuffer(GL_ARRAY_BUFFER, chunk.getVBO());
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);//tells open gl the format of the data given
+    glEnableVertexAttribArray(0);
 
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, chunk.visible());
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    glDrawArrays(GL_TRIANGLES, 0, chunk.count);
     glBindVertexArray(0);
 }
 
 void RenderChunk::initRenderData()
 {
-    float vertices[] = {
-        // Back face changed text cords casue they be upside down in game
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,                    // Bottom-left
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,                   // bottom-right    
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f,                   // top-right              
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f,                   // top-right
-        -0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,                   // top-left
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,                   // bottom-left                
-        // Front face
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,                    // bottom-left
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,                    // top-right
-         0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,                    // bottom-right        
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,                    // top-right
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,                    // bottom-left
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,                    // top-left        
-        // Left face
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f,                    // top-right
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, -1.0f, 0.0f, 0.0f,                    // bottom-left
-        -0.5f,  0.5f, -0.5f,  1.0f, 0.0f, -1.0f, 0.0f, 0.0f,                    // top-left       
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, -1.0f, 0.0f, 0.0f,                    // bottom-left
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f,                    // top-right
-        -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, -1.0f, 0.0f, 0.0f,                    // bottom-right
-        // Right face
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,                   // top-left
-         0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f,                   // top-right      
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,  1.0f, 0.0f, 0.0f,                   // bottom-right          
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,  1.0f, 0.0f, 0.0f,                   // bottom-right
-         0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  1.0f, 0.0f, 0.0f,                   // bottom-left
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,                   // top-left
-         // Bottom face          
-         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f,                    // top-right
-          0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,                    // bottom-left
-          0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, -1.0f, 0.0f,                    // top-left        
-          0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,                    // bottom-left
-         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f,                    // top-right
-         -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, -1.0f, 0.0f,                    // bottom-right
-         // Top face
-         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f,                   // top-left
-          0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f,                   // top-right
-          0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f,                   // bottom-right                 
-          0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f,                   // bottom-right
-         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f,                   // bottom-left  
-         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f                   // top-left              
-    };
-
-    glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &quadVAO);
     //drawing an object
     glBindVertexArray(quadVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);//Binds the Buffer and the vertext object together so they can share info
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);// copys verticies into the buffer
-
-
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);//tells open gl the format of the data given
     glEnableVertexAttribArray(0);
 

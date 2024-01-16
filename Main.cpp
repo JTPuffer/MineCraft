@@ -87,9 +87,11 @@ int main(void)
 
         g->Render();
 
- 
+
         glfwSwapBuffers(window);
+
         glfwPollEvents();
+
         temp += 0.001f;
         //std::cout << 1 / deltaTime << '\n';
     }
